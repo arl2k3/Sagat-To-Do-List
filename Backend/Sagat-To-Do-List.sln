@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36310.24 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sagat-To-Do-List", "Sagat-To-Do-List\Sagat-To-Do-List.csproj", "{120B7A2A-B679-41C1-9A21-0C6094F9205A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{120B7A2A-B679-41C1-9A21-0C6094F9205A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{120B7A2A-B679-41C1-9A21-0C6094F9205A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{120B7A2A-B679-41C1-9A21-0C6094F9205A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{120B7A2A-B679-41C1-9A21-0C6094F9205A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F865FF6D-25DF-4D24-A06E-388C83C4EE08}
+	EndGlobalSection
+EndGlobal
