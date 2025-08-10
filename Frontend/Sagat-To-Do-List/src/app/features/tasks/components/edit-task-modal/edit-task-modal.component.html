@@ -1,0 +1,55 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Editar Tarea</h3>
+      <button class="close-button" (click)="onClose()" type="button">×</button>
+    </div>
+    
+    <form (ngSubmit)="onSave()" #editForm="ngForm" class="modal-form">
+      <div class="form-group">
+        <label for="title">Título</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          [(ngModel)]="formData.title"
+          required
+          maxlength="100"
+          class="form-control"
+          placeholder="Ingresa el título de la tarea">
+        <div class="error-message" *ngIf="editForm.submitted && !formData.title.trim()">
+          El título es obligatorio
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="description">Descripción</label>
+        <textarea
+          id="description"
+          name="description"
+          [(ngModel)]="formData.description"
+          required
+          maxlength="500"
+          rows="4"
+          class="form-control textarea"
+          placeholder="Ingresa la descripción de la tarea"></textarea>
+        <div class="error-message" *ngIf="editForm.submitted && !formData.description.trim()">
+          La descripción es obligatoria
+        </div>
+        <div class="char-counter">
+          {{ formData.description.length || 0 }}/500 caracteres
+        </div>
+      </div>
+      
+      <div class="modal-actions">
+        <button type="button" (click)="onClose()" class="btn btn-secondary" [disabled]="isLoading">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading || !isFormValid()">
+          <span *ngIf="isLoading" class="loading-spinner"></span>
+          {{ isLoading ? 'Guardando...' : 'Guardar Cambios' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

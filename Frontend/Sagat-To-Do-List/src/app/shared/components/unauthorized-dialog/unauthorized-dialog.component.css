@@ -1,0 +1,304 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.unauthorized-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 500px;
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  border-radius: 20px;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  z-index: 1001;
+  overflow: hidden;
+  animation: slideIn 0.4s ease;
+}
+
+.dialog-header {
+  padding: 2.5rem 2rem 1.5rem;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(220, 53, 69, 0.08), rgba(255, 193, 7, 0.06));
+  border-bottom: 1px solid rgba(220, 53, 69, 0.1);
+}
+
+.dialog-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  display: block;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.15));
+  animation: shake 0.5s ease-in-out;
+}
+
+.dialog-title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #2c3e50;
+  background: linear-gradient(135deg, #dc3545, #fd7e14);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dialog-content {
+  padding: 2rem;
+}
+
+.dialog-message {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #495057;
+  text-align: center;
+  font-weight: 500;
+}
+
+.info-box {
+  background: linear-gradient(135deg, rgba(255, 243, 205, 0.8), rgba(254, 235, 200, 0.6));
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.info-text {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #856404;
+  text-align: left;
+}
+
+.info-text strong {
+  color: #6c5804;
+  font-weight: 700;
+}
+
+.dialog-actions {
+  padding: 1.5rem 2rem 2.5rem;
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(248, 249, 250, 0.6), rgba(255, 255, 255, 0.9));
+}
+
+.btn {
+  padding: 1rem 3rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 160px;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-acknowledge-delete {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: white;
+  box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+}
+
+.btn-acknowledge-delete:hover {
+  background: linear-gradient(135deg, #c82333, #a71e2a);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(220, 53, 69, 0.5);
+}
+
+.btn-acknowledge-access {
+  background: linear-gradient(135deg, #6f42c1, #5a32a3);
+  color: white;
+  box-shadow: 0 6px 20px rgba(111, 66, 193, 0.4);
+}
+
+.btn-acknowledge-access:hover {
+  background: linear-gradient(135deg, #5a32a3, #4c2a85);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(111, 66, 193, 0.5);
+}
+
+.btn-acknowledge-permission {
+  background: linear-gradient(135deg, #fd7e14, #e8590c);
+  color: white;
+  box-shadow: 0 6px 20px rgba(253, 126, 20, 0.4);
+}
+
+.btn-acknowledge-permission:hover {
+  background: linear-gradient(135deg, #e8590c, #dc5309);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(253, 126, 20, 0.5);
+}
+
+.btn-acknowledge-action {
+  background: linear-gradient(135deg, #6c757d, #5a6268);
+  color: white;
+  box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+}
+
+.btn-acknowledge-action:hover {
+  background: linear-gradient(135deg, #5a6268, #495057);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(108, 117, 125, 0.5);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.6s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.delete-unauthorized .dialog-header {
+  background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), rgba(255, 193, 7, 0.05));
+}
+
+.access-unauthorized .dialog-header {
+  background: linear-gradient(135deg, rgba(111, 66, 193, 0.1), rgba(102, 126, 234, 0.05));
+}
+
+.permission-unauthorized .dialog-header {
+  background: linear-gradient(135deg, rgba(253, 126, 20, 0.1), rgba(255, 193, 7, 0.08));
+}
+
+.action-unauthorized .dialog-header {
+  background: linear-gradient(135deg, rgba(108, 117, 125, 0.1), rgba(134, 142, 150, 0.05));
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7) rotateY(-10deg);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .unauthorized-dialog {
+    width: 95%;
+    max-width: none;
+    margin: 1rem;
+  }
+  
+  .dialog-header {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+  
+  .dialog-content {
+    padding: 1.5rem;
+  }
+  
+  .dialog-actions {
+    padding: 1.5rem 1.5rem 2rem;
+  }
+  
+  .btn {
+    width: 100%;
+    min-width: unset;
+    padding: 1rem 2rem;
+  }
+  
+  .dialog-icon {
+    font-size: 3.5rem;
+  }
+  
+  .dialog-title {
+    font-size: 1.4rem;
+  }
+  
+  .dialog-message {
+    font-size: 1.1rem;
+  }
+  
+  .info-text {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .unauthorized-dialog {
+    width: 98%;
+  }
+  
+  .dialog-header,
+  .dialog-content,
+  .dialog-actions {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .dialog-icon {
+    font-size: 3rem;
+  }
+  
+  .dialog-title {
+    font-size: 1.2rem;
+  }
+  
+  .dialog-message {
+    font-size: 1rem;
+  }
+  
+  .info-box {
+    padding: 1rem;
+  }
+  
+  .btn {
+    font-size: 1rem;
+    padding: 0.875rem 1.5rem;
+  }
+}
+
+.unauthorized-dialog:hover .dialog-icon {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}

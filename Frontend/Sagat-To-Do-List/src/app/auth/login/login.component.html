@@ -1,0 +1,102 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>{{ isLoginMode ? 'Iniciar Sesión' : 'Registrarse' }}</h2>
+    
+    <div *ngIf="errorMessage" class="message error-message">
+      {{ errorMessage }}
+    </div>
+    <div *ngIf="successMessage" class="message success-message">
+      {{ successMessage }}
+    </div>
+
+    <!-- Login Form -->
+    <form *ngIf="isLoginMode" (ngSubmit)="onLogin()" class="auth-form">
+      <div class="form-group">
+        <label for="loginEmail">Email:</label>
+        <input
+          type="email"
+          id="loginEmail"
+          [(ngModel)]="loginData.email"
+          name="email"
+          placeholder="Ingresa tu email"
+          required
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="loginPassword">Contraseña:</label>
+        <input
+          type="password"
+          id="loginPassword"
+          [(ngModel)]="loginData.password"
+          name="password"
+          placeholder="Ingresa tu contraseña"
+          required
+          autocomplete="current-password"
+        />
+      </div>
+
+      <button type="submit" [disabled]="isLoading" class="submit-btn">
+        {{ isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
+      </button>
+    </form>
+
+    <!-- Register Form -->
+    <form *ngIf="!isLoginMode" (ngSubmit)="onRegister()" class="auth-form">
+      <div class="form-group">
+        <label for="registerEmail">Email:</label>
+        <input
+          type="email"
+          id="registerEmail"
+          [(ngModel)]="registerData.email"
+          name="email"
+          placeholder="Ingresa tu email"
+          required
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="registerPassword">Contraseña:</label>
+        <input
+          type="password"
+          id="registerPassword"
+          [(ngModel)]="registerData.password"
+          name="password"
+          placeholder="Mínimo 6 caracteres"
+          required
+          autocomplete="new-password"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar Contraseña:</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          [(ngModel)]="registerData.confirmPassword"
+          name="confirmPassword"
+          placeholder="Repite tu contraseña"
+          required
+          autocomplete="new-password"
+        />
+      </div>
+
+      <button type="submit" [disabled]="isLoading" class="submit-btn">
+        {{ isLoading ? 'Registrando...' : 'Registrarse' }}
+      </button>
+    </form>
+
+    <div class="toggle-mode">
+      <p *ngIf="isLoginMode">
+        ¿No tienes una cuenta? 
+        <a href="#" (click)="toggleMode(); $event.preventDefault()">Regístrate aquí</a>
+      </p>
+      <p *ngIf="!isLoginMode">
+        ¿Ya tienes una cuenta? 
+        <a href="#" (click)="toggleMode(); $event.preventDefault()">Inicia sesión aquí</a>
+      </p>
+    </div>
+  </div>
+</div>

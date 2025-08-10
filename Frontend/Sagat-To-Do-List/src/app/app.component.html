@@ -1,0 +1,13 @@
+<app-header *ngIf="showHeader"></app-header>
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<app-confirm-dialog></app-confirm-dialog>
+
+<app-unauthorized-dialog 
+  *ngIf="unauthorizedDialogData"
+  [isVisible]="unauthorizedDialogVisible"
+  [data]="unauthorizedDialogData"
+  (result)="onUnauthorizedDialogResult($event)">
+</app-unauthorized-dialog>

@@ -1,0 +1,16 @@
+<header class="header">
+  <div class="header-container">
+    <div class="header-brand">
+      <img src="assets/tareas.png" alt="Tasks" class="logo">
+      <h1 class="brand-title">To do list Sagat</h1>
+    </div>
+    
+    <div class="header-user" *ngIf="currentUser">
+      <span class="user-info">
+        <strong class="user-label">Usuario:</strong>
+        <span class="user-email">{{ currentUser.email }}</span>
+      </span>
+      <button class="logout-btn" (click)="logout()">Cerrar Sesión</button>
+    </div>
+  </div>
+</header>

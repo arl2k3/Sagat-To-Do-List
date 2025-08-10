@@ -1,0 +1,16 @@
+<div class="tasks-container">
+  @if (tasks.length === 0) {
+    <div class="empty-state">
+      <p>No hay tareas disponibles.</p>
+    </div>
+  } @else {
+    @for (task of tasks; track task.id) {
+      <app-task-item
+        [task]="task"
+        (taskDeleted)="onTaskDeleted($event)"
+        (taskUpdated)="onTaskUpdated($event)"
+        (editTask)="onTaskEdit($event)">
+      </app-task-item>
+    }
+  }
+</div>

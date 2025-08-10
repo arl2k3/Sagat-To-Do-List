@@ -1,0 +1,61 @@
+<div class="backdrop" (click)="onCancel()"></div>
+<dialog open>
+  <h2>Crear Nueva Tarea</h2>
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="title">Título *</label>
+      <input 
+        type="text" 
+        id="title" 
+        formControlName="title"
+        placeholder="Ingresa el título de la tarea"
+        [class.error]="titleControl?.invalid && titleControl?.touched"
+        class="form-control" />
+      
+      @if (titleErrors) {
+        <div class="error-message">{{ titleErrors }}</div>
+      }
+      
+      <div class="helper-text">{{ getTitleHelperText() }}</div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Descripción</label>
+      <textarea 
+        id="description" 
+        formControlName="description"
+        placeholder="Describe la tarea (opcional)"
+        [class.error]="descriptionControl?.invalid && descriptionControl?.touched"
+        class="form-control textarea"
+        rows="4">
+      </textarea>
+      
+      @if (descriptionErrors) {
+        <div class="error-message">{{ descriptionErrors }}</div>
+      }
+      
+      <div class="helper-text">{{ getDescriptionHelperText() }}</div>
+    </div>
+
+    <div class="form-actions">
+      <button 
+        type="button" 
+        class="btn btn-secondary" 
+        (click)="onCancel()"
+        [disabled]="isLoading">
+        Cancelar
+      </button>
+      <button 
+        type="submit" 
+        class="btn btn-primary" 
+        [disabled]="taskForm.invalid || isLoading">
+        @if (isLoading) {
+          <span class="loading-spinner"></span>
+          Creando...
+        } @else {
+          Crear Tarea
+        }
+      </button>
+    </div>
+  </form>
+</dialog>

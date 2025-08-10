@@ -47,10 +47,13 @@ namespace Sagat_To_Do_List.Controllers
                 if (string.IsNullOrEmpty(userId))
                     return Unauthorized("Usuario no válido.");
 
+                // Si la descripción es nula, vacía o solo espacios, asignar " "
+                var descripcion = string.IsNullOrWhiteSpace(createTaskDto.Description) ? " " : createTaskDto.Description;
+
                 var tarea = new Tasks
                 {
                     Title = createTaskDto.Title,
-                    Description = createTaskDto.Description,
+                    Description = descripcion,
                     IsCompleted = false,
                     CreatedByUserId = userId
                 };

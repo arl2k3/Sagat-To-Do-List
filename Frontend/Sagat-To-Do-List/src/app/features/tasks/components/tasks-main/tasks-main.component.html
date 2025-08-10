@@ -1,0 +1,54 @@
+<div class="tasks-page">
+</div>
+
+<div class="content-container" [class.blurred]="showNewTaskForm() || showEditTaskForm()">
+  <div class="header-section">
+    <div class="title-container">
+      <h1 class="page-title">Gestión de Tareas</h1>
+    </div>
+    <button 
+      class="btn-add-circular"
+      (click)="toggleNewTask()"
+      [class.active]="showNewTaskForm()"
+      [title]="showNewTaskForm() ? 'Cancelar nueva tarea' : 'Agregar nueva tarea'">
+      @if (showNewTaskForm()) {
+        <span class="icon">✕</span>
+      } @else {
+        <span class="icon">+</span>
+      }
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="loading-spinner-large"></div>
+      <p>Cargando tareas...</p>
+    </div>
+  }
+
+  @if (!loading()) {
+    <div class="tasks-section">
+      <app-task-list
+        [tasks]="tasks()"
+        (taskDeleted)="onTaskDeleted($event)"
+        (taskUpdated)="onTaskUpdated($event)"
+        (editTask)="onTaskEdit($event)">
+      </app-task-list>
+    </div>
+  }
+</div>
+
+@if (showNewTaskForm()) {
+  <app-new-task
+    (taskCreated)="onTaskCreated($event)"
+    (cancelled)="onNewTaskCancelled()">
+  </app-new-task>
+}
+
+@if (showEditTaskForm() && taskToEdit()) {
+  <app-edit-task-modal
+    [task]="taskToEdit()!"
+    (taskUpdated)="onEditTaskUpdated($event)"
+    (closeModal)="onEditTaskCancelled()">
+  </app-edit-task-modal>
+}

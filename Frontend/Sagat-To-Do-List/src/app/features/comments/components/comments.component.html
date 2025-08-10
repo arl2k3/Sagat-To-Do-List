@@ -1,0 +1,294 @@
+<div class="comments-container">
+  <div class="comments-header">
+    <h3>Comentarios</h3>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Cargando comentarios...</p>
+    </div>
+  }
+
+  <form [formGroup]="newCommentForm" (ngSubmit)="onAddComment()" class="add-comment">
+    <textarea 
+      formControlName="comment"
+      placeholder="Escribe un comentario..." 
+      class="comment-textarea"
+      rows="3">
+    </textarea>
+    @if (newCommentForm.get('comment')?.invalid && newCommentForm.get('comment')?.touched) {
+      <div class="validation-error">El comentario es requerido</div>
+    }
+    <div class="comment-actions">
+      <button 
+        type="submit"
+        class="btn-primary" 
+        [disabled]="newCommentForm.invalid || isCreating">
+        @if (isCreating) {
+          <span class="loading-text">Agregando...</span>
+        } @else {
+          Agregar Comentario
+        }
+      </button>
+    </div>
+  </form>
+
+  @if (!loading() && comments().length > 0) {
+    <div class="comments-list">
+      @for (comment of comments(); track trackByCommentId($index, comment)) {
+        <div class="comment-item" 
+             [class.deleting]="deleting().has(comment.id)">
+          <div class="comment-content">
+            @if (editingCommentId() === comment.id) {
+              <form [formGroup]="editCommentForm" (ngSubmit)="onUpdateComment()" class="edit-comment">
+                <textarea 
+                  formControlName="comment"
+                  class="comment-textarea"
+                  rows="3">
+                </textarea>
+                @if (editCommentForm.get('comment')?.invalid && editCommentForm.get('comment')?.touched) {
+                  <div class="validation-error">El comentario es requerido</div>
+                }
+                <div class="comment-actions">
+                  <button 
+                    type="submit" 
+                    class="btn-primary" 
+                    [disabled]="editCommentForm.invalid || isUpdating(comment.id)">
+                    @if (isUpdating(comment.id)) {
+                      <span class="loading-text">Guardando...</span>
+                    } @else {
+                      Guardar
+                    }
+                  </button>
+                  <button type="button" class="btn-secondary" (click)="cancelEdit()">
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            } @else {
+              @if (deleting().has(comment.id)) {
+                <div class="deleting-overlay">
+                  <div class="deleting-message">
+                    <span class="deleting-icon">🗑️</span>
+                    <span>Eliminando comentario...</span>
+                  </div>
+                </div>
+              }
+              <div class="comment-text">
+                {{ comment.comment }}
+              </div>
+              <div class="comment-meta">
+                @if (comment.isUpdated) {
+                  <span class="edited-label">(editado)</span>
+                }
+              </div>
+              <div class="comment-actions">
+                <button 
+                  class="btn-link" 
+                  (click)="startReply(comment.id)"
+                  [disabled]="isDeleting(comment.id)">
+                  Responder
+                </button>
+                <button 
+                  class="btn-link" 
+                  (click)="startEdit(comment)"
+                  [disabled]="isDeleting(comment.id) || isUpdating(comment.id)">
+                  @if (isUpdating(comment.id)) {
+                    Editando...
+                  } @else {
+                    Editar
+                  }
+                </button>
+                <button 
+                  class="btn-link btn-delete" 
+                  (click)="onDeleteComment(comment)"
+                  [disabled]="isDeleting(comment.id)">
+                  @if (isDeleting(comment.id)) {
+                    Eliminando...
+                  } @else {
+                    Eliminar
+                  }
+                </button>
+              </div>
+            }
+          </div>
+
+          @if (replyingToCommentId() === comment.id) {
+            <form [formGroup]="replyForm" (ngSubmit)="onReplyToComment(comment.id)" class="reply-form">
+              <textarea 
+                formControlName="comment"
+                placeholder="Escribe una respuesta..." 
+                class="comment-textarea reply-textarea"
+                rows="2">
+              </textarea>
+              @if (replyForm.get('comment')?.invalid && replyForm.get('comment')?.touched) {
+                <div class="validation-error">La respuesta es requerida</div>
+              }
+              <div class="comment-actions">
+                <button 
+                  type="submit"
+                  class="btn-primary" 
+                  [disabled]="replyForm.invalid || isCreating">
+                  @if (isCreating) {
+                    Respondiendo...
+                  } @else {
+                    Responder
+                  }
+                </button>
+                <button type="button" class="btn-secondary" (click)="cancelReply()">
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          }
+
+          <!-- Replies -->
+          @if (comment.replies && comment.replies.length > 0) {
+            <div class="replies-container">
+              @for (reply of comment.replies; track trackByCommentId($index, reply)) {
+                <div class="reply-item"
+                     [class.deleting]="deleting().has(reply.id)">
+                  @if (editingCommentId() === reply.id) {
+                    <!-- Edit mode for reply -->
+                    <form [formGroup]="editCommentForm" (ngSubmit)="onUpdateComment()" class="edit-comment">
+                      <textarea 
+                        formControlName="comment"
+                        class="comment-textarea reply-textarea"
+                        rows="2">
+                      </textarea>
+                      <div class="comment-actions">
+                        <button 
+                          type="submit"
+                          class="btn-primary" 
+                          [disabled]="editCommentForm.invalid || isUpdating(reply.id)">
+                          @if (isUpdating(reply.id)) {
+                            Guardando...
+                          } @else {
+                            Guardar
+                          }
+                        </button>
+                        <button type="button" class="btn-secondary" (click)="cancelEdit()">
+                          Cancelar
+                        </button>
+                      </div>
+                    </form>
+                  } @else {
+                    <div class="reply-content">
+                      <div class="comment-text">
+                        {{ reply.comment }}
+                      </div>
+                      <div class="comment-meta">
+                        @if (reply.isUpdated) {
+                          <span class="edited-label">(editado)</span>
+                        }
+                      </div>
+                      <div class="comment-actions">
+                        <button 
+                          class="btn-link" 
+                          (click)="startReply(reply.id)"
+                          [disabled]="isDeleting(reply.id)">
+                          Responder
+                        </button>
+                        <button 
+                          class="btn-link" 
+                          (click)="startEdit(reply)"
+                          [disabled]="isDeleting(reply.id) || isUpdating(reply.id)">
+                          @if (isUpdating(reply.id)) {
+                            Editando...
+                          } @else {
+                            Editar
+                          }
+                        </button>
+                        <button 
+                          class="btn-link btn-delete" 
+                          (click)="onDeleteComment(reply)"
+                          [disabled]="isDeleting(reply.id)">
+                          @if (isDeleting(reply.id)) {
+                            Eliminando...
+                          } @else {
+                            Eliminar
+                          }
+                        </button>
+                      </div>
+                    </div>
+                  }
+
+                  @if (replyingToCommentId() === reply.id) {
+                    <form [formGroup]="replyForm" (ngSubmit)="onReplyToComment(reply.id)" class="reply-form nested-reply-form">
+                      <textarea 
+                        formControlName="comment"
+                        placeholder="Escribe una respuesta..." 
+                        class="comment-textarea reply-textarea"
+                        rows="2">
+                      </textarea>
+                      <div class="comment-actions">
+                        <button 
+                          type="submit"
+                          class="btn-primary" 
+                          [disabled]="replyForm.invalid || isCreating">
+                          @if (isCreating) {
+                            Respondiendo...
+                          } @else {
+                            Responder
+                          }
+                        </button>
+                        <button type="button" class="btn-secondary" (click)="cancelReply()">
+                          Cancelar
+                        </button>
+                      </div>
+                    </form>
+                  }
+
+                  @if (reply.replies && reply.replies.length > 0) {
+                    <div class="nested-replies-container">
+                      @for (nestedReply of reply.replies; track trackByCommentId($index, nestedReply)) {
+                        <div class="nested-reply-item"
+                             [class.deleting]="deleting().has(nestedReply.id)">
+                          <div class="nested-reply-content">
+                            <div class="comment-text">
+                              {{ nestedReply.comment }}
+                            </div>
+                            <div class="comment-meta">
+                              @if (nestedReply.isUpdated) {
+                                <span class="edited-label">(editado)</span>
+                              }
+                            </div>
+                            <div class="comment-actions">
+                              <button 
+                                class="btn-link" 
+                                (click)="startEdit(nestedReply)"
+                                [disabled]="isDeleting(nestedReply.id) || isUpdating(nestedReply.id)">
+                                Editar
+                              </button>
+                              <button 
+                                class="btn-link btn-delete" 
+                                (click)="onDeleteComment(nestedReply)"
+                                [disabled]="isDeleting(nestedReply.id)">
+                                @if (isDeleting(nestedReply.id)) {
+                                  Eliminando...
+                                } @else {
+                                  Eliminar
+                                }
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  @if (!loading() && !error() && comments().length === 0) {
+    <div class="empty-comments">
+      <p>No hay comentarios aún.</p>
+    </div>
+  }
+</div>

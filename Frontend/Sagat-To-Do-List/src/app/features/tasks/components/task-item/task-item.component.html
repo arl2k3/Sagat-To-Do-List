@@ -1,0 +1,61 @@
+<article class="task-card" [class.completed]="task.isCompleted" [class.expanded]="expanded()">
+  <div class="task-header">
+    <h2 class="task-title">{{ task.title }}</h2>
+    <div class="task-status">
+      <span class="status-badge" [class.completed]="task.isCompleted">
+        {{ task.isCompleted ? 'Completada' : 'Pendiente' }}
+      </span>
+    </div>
+  </div>
+  
+  <div class="task-content" (click)="toggleExpanded()">
+    <p class="task-description">{{ task.description }}</p>
+    <div class="expand-indicator" [class.expanded]="expanded()">
+      <span class="expand-text">{{ expanded() ? 'Ocultar comentarios' : 'Ver comentarios' }}</span>
+      <span class="expand-icon">{{ expanded() ? '▲' : '▼' }}</span>
+    </div>
+  </div>
+  
+  <div class="task-actions">
+    <button 
+      class="btn-circular btn-edit" 
+      (click)="onEditTask()"
+      [disabled]="loading()"
+      title="Editar tarea">
+      @if (loading()) {
+        <span class="loading-spinner"></span>
+      } @else {
+        <span class="icon-edit">✏️</span>
+      }
+    </button>
+    <button 
+      class="btn-circular btn-complete" 
+      [class.completed]="task.isCompleted"
+      (click)="onToggleComplete()"
+      [disabled]="loading()"
+      [title]="task.isCompleted ? 'Marcar como pendiente' : 'Marcar como completada'">
+      @if (loading()) {
+        <span class="loading-spinner"></span>
+      } @else {
+        <span class="icon-check">✓</span>
+      }
+    </button>
+    <button 
+      class="btn-circular btn-delete" 
+      (click)="onDeleteTask()"
+      [disabled]="loading()"
+      title="Eliminar tarea">
+      @if (loading()) {
+        <span class="loading-spinner"></span>
+      } @else {
+        <span class="icon-trash">🗑</span>
+      }
+    </button>
+  </div>
+
+  @if (expanded()) {
+    <div class="comments-section">
+      <app-comments [taskId]="task.id"></app-comments>
+    </div>
+  }
+</article>
