@@ -8,6 +8,9 @@ using System.Security.Claims;
 
 namespace Sagat_To_Do_List.Controllers
 {
+    /// <summary>
+    /// Controlador para la gestión de tareas del sistema
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     [Authorize] 
@@ -19,7 +22,20 @@ namespace Sagat_To_Do_List.Controllers
         {
             _context = context;
         }
+        /// <summary>
+        /// Crea una nueva tarea
+        /// </summary>
+        /// <param name="createTaskDto">Datos de la tarea (Title y Description)</param>
+        /// <returns>TaskDto con la tarea creada incluyendo sus comentarios</returns>
+        /// <response code="201">Tarea creada exitosamente</response>
+        /// <response code="400">Título de la tarea es requerido</response>
+        /// <response code="401">Usuario no válido</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpPost]
+        [ProducesResponseType(typeof(TaskDto), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<TaskDto>> CreateTarea(CreateTaskDto createTaskDto)
         {
             try
@@ -57,8 +73,17 @@ namespace Sagat_To_Do_List.Controllers
             }
         }
 
+        /// <summary>
+        /// Obtiene todas las tareas del sistema
+        /// </summary>
+        /// <returns>Lista de TaskDto con comentarios</returns>
+        /// <response code="200">Lista de tareas obtenida exitosamente</response>
+        /// <response code="401">Usuario no autenticado</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpGet]
-
+        [ProducesResponseType(typeof(IEnumerable<TaskDto>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<IEnumerable<TaskDto>>> GetAllTasks()
         {
             try
@@ -85,7 +110,20 @@ namespace Sagat_To_Do_List.Controllers
             }
         }
 
+        /// <summary>
+        /// Obtiene una tarea específica por su ID
+        /// </summary>
+        /// <param name="id">ID de la tarea a obtener</param>
+        /// <returns>TaskDto con comentarios</returns>
+        /// <response code="200">Tarea obtenida exitosamente</response>
+        /// <response code="401">Usuario no autenticado</response>
+        /// <response code="404">Tarea no encontrada</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(TaskDto), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<TaskDto>> GetTareaById(int id)
         {
             try
@@ -108,7 +146,23 @@ namespace Sagat_To_Do_List.Controllers
             }
         }
 
+        /// <summary>
+        /// Actualiza una tarea existente. Solo el creador o un admin pueden actualizarla
+        /// </summary>
+        /// <param name="id">ID de la tarea a actualizar</param>
+        /// <param name="updateTaskDto">Campos a actualizar: Title, Description, IsCompleted</param>
+        /// <returns>TaskDto actualizado con comentarios</returns>
+        /// <response code="200">Tarea actualizada exitosamente</response>
+        /// <response code="401">Usuario no válido</response>
+        /// <response code="403">Sin permisos para actualizar la tarea</response>
+        /// <response code="404">Tarea no encontrada</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(TaskDto), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<TaskDto>> UpdateTarea(int id, UpdateTaskDto updateTaskDto)
         {
             try
@@ -151,8 +205,22 @@ namespace Sagat_To_Do_List.Controllers
             }
         }
 
+        /// <summary>
+        /// Elimina una tarea existente. Solo el creador o un admin pueden eliminarla
+        /// </summary>
+        /// <param name="id">ID de la tarea a eliminar</param>
+        /// <returns>204 No Content si se elimina exitosamente</returns>
+        /// <response code="204">Tarea eliminada exitosamente</response>
+        /// <response code="401">Usuario no válido</response>
+        /// <response code="403">Sin permisos para eliminar la tarea</response>
+        /// <response code="404">Tarea no encontrada</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpDelete("{id}")]
-
+        [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> DeleteTarea(int id)
         {
             try

@@ -1,7 +1,15 @@
 using Sagat_To_Do_List.Configuration;
 using Sagat_To_Do_List.Extensions;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Deshabilitar Problem Details automáticos
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = false;
+    options.SuppressMapClientErrors = true;
+});
 
 builder.Services
     .AddApplicationServices(builder.Configuration)

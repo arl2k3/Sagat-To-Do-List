@@ -8,6 +8,9 @@ using System.Security.Claims;
 
 namespace Sagat_To_Do_List.Controllers
 {
+    /// <summary>
+    /// Controlador para la gestión de comentarios en las tareas
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     [Authorize] 
@@ -20,7 +23,20 @@ namespace Sagat_To_Do_List.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Crea un nuevo comentario en una tarea
+        /// </summary>
+        /// <param name="createCommentDto">Datos del comentario: Comment, TaskId, ParentCommentId (opcional)</param>
+        /// <returns>CommentDto creado</returns>
+        /// <response code="201">Comentario creado exitosamente</response>
+        /// <response code="400">Datos inválidos o tarea no existe</response>
+        /// <response code="401">Usuario no válido</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpPost]
+        [ProducesResponseType(typeof(CommentDto), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<CommentDto>> CreateComentario(CreateCommentDto createCommentDto)
         {
             try
@@ -72,7 +88,20 @@ namespace Sagat_To_Do_List.Controllers
             }
         }
 
+        /// <summary>
+        /// Obtiene todos los comentarios de una tarea organizados jerárquicamente
+        /// </summary>
+        /// <param name="TaskId">ID de la tarea</param>
+        /// <returns>Lista de CommentDto organizados jerárquicamente</returns>
+        /// <response code="200">Comentarios obtenidos exitosamente</response>
+        /// <response code="401">Usuario no autenticado</response>
+        /// <response code="404">Tarea no encontrada</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpGet("Tasks/{TaskId}")]
+        [ProducesResponseType(typeof(IEnumerable<CommentDto>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<IEnumerable<CommentDto>>> GetCommentsByTarea(int TaskId)
         {
             try
@@ -90,7 +119,25 @@ namespace Sagat_To_Do_List.Controllers
             }
         }
 
+        /// <summary>
+        /// Actualiza un comentario existente. Solo el creador o un admin pueden actualizarlo
+        /// </summary>
+        /// <param name="id">ID del comentario a actualizar</param>
+        /// <param name="updateCommentDto">Nuevo contenido del comentario</param>
+        /// <returns>CommentDto actualizado</returns>
+        /// <response code="200">Comentario actualizado exitosamente</response>
+        /// <response code="400">Contenido del comentario requerido</response>
+        /// <response code="401">Usuario no válido</response>
+        /// <response code="403">Sin permisos para actualizar el comentario</response>
+        /// <response code="404">Comentario no encontrado</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(CommentDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<CommentDto>> UpdateComentario(int id, UpdateCommentDto updateCommentDto)
         {
             try
@@ -129,7 +176,22 @@ namespace Sagat_To_Do_List.Controllers
             }
         }
 
+        /// <summary>
+        /// Elimina un comentario y todas sus respuestas. Solo el creador o un admin pueden eliminarlo
+        /// </summary>
+        /// <param name="id">ID del comentario a eliminar</param>
+        /// <returns>204 No Content si se elimina exitosamente</returns>
+        /// <response code="204">Comentario eliminado exitosamente</response>
+        /// <response code="401">Usuario no válido</response>
+        /// <response code="403">Sin permisos para eliminar el comentario</response>
+        /// <response code="404">Comentario no encontrado</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> DeleteComentario(int id)
         {
             try

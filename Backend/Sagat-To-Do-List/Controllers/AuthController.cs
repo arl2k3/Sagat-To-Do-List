@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Sagat_To_Do_List.Controllers
 {
+    /// <summary>
+    /// Controlador para la gestión de autenticación y autorización de usuarios
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
@@ -23,7 +26,18 @@ namespace Sagat_To_Do_List.Controllers
             _jwtService = jwtService;
         }
 
+        /// <summary>
+        /// Registra un nuevo usuario en el sistema
+        /// </summary>
+        /// <param name="createUserDto">Datos del usuario a registrar (Email y Password)</param>
+        /// <returns>UserDto con Id y Email del usuario registrado</returns>
+        /// <response code="201">Usuario registrado exitosamente</response>
+        /// <response code="400">Errores de validación o usuario ya existe</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpPost("register")]
+        [ProducesResponseType(typeof(UserDto), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<UserDto>> Register(CreateUserDto createUserDto)
         {
             try
@@ -65,7 +79,20 @@ namespace Sagat_To_Do_List.Controllers
             }
         }
 
+        /// <summary>
+        /// Autentica un usuario en el sistema
+        /// </summary>
+        /// <param name="createUserDto">Credenciales del usuario (Email y Password)</param>
+        /// <returns>LoginResponseDto con Token JWT, UserDto y Role del usuario</returns>
+        /// <response code="200">Autenticación exitosa</response>
+        /// <response code="400">Errores de validación</response>
+        /// <response code="401">Credenciales inválidas</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpPost("login")]
+        [ProducesResponseType(typeof(LoginResponseDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<LoginResponseDto>> Login(CreateUserDto createUserDto)
         {
             try
