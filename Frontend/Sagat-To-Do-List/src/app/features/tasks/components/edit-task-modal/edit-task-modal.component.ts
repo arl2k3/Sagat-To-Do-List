@@ -10,6 +10,11 @@ export interface EditTaskFormData {
   description: string;
 }
 
+export interface UpdateTaskData {
+  title: string;
+  description: string;
+}
+
 @Component({
   selector: 'app-edit-task-modal',
   standalone: true,
@@ -48,14 +53,9 @@ export class EditTaskModalComponent implements OnInit {
 
     this.isLoading = true;
 
-
-    const updateData = {
-      id: this.task.id,
+    const updateData: UpdateTaskData = {
       title: this.formData.title.trim(),
-      description: this.formData.description.trim(),
-      isCompleted: this.task.isCompleted,
-      comentarios: this.task.comentarios ?? [],
-      createdByUserId: (this.task as any).createdByUserId ?? undefined
+      description: this.formData.description.trim()
     };
 
     this.tasksService.updateTask(this.task.id, updateData)
@@ -125,6 +125,7 @@ export class EditTaskModalComponent implements OnInit {
         return;
       }
       
+      // Para error 500 sin mensaje específico, asumir que es problema de permisos
       console.log('Error 500 detectado - asumiendo problema de permisos');
       this.unauthorizedService.showActionError(
         'No tienes permisos para editar esta tarea. Solo el propietario puede modificarla.'
