@@ -18,9 +18,10 @@ namespace Sagat_To_Do_List.Services
         public async Task<string> GenerateJwtToken(IdentityUser user, string role)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
-            var secretKey = jwtSettings["SecretKey"] ?? "SAGAT-To-Do-List-Super-Secret-Key-2025";
-
-            var key = Encoding.ASCII.GetBytes(secretKey);
+            var secretKey = jwtSettings["SecretKey"];
+            var issuer = jwtSettings["Issuer"];
+            var audience = jwtSettings["Audience"];
+            var key = Encoding.ASCII.GetBytes(secretKey!);
 
             var claims = new List<Claim>
             {
@@ -33,7 +34,9 @@ namespace Sagat_To_Do_List.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(15), 
+            Expires = DateTime.UtcNow.AddMinutes(15),
+            Issuer = issuer,
+            Audience = audience,
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key), 
                 SecurityAlgorithms.HmacSha256Signature)

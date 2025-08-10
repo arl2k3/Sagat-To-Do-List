@@ -10,7 +10,7 @@ namespace Sagat_To_Do_List.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize] // Proteger todos los endpoints
+    [Authorize] 
     public class CommentsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -72,7 +72,7 @@ namespace Sagat_To_Do_List.Controllers
             }
         }
 
-        [HttpGet("tarea/{TaskId}")]
+        [HttpGet("Tasks/{TaskId}")]
         public async Task<ActionResult<IEnumerable<CommentDto>>> GetCommentsByTarea(int TaskId)
         {
             try
