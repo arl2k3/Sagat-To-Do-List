@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace SAGAT_Ingreso.DTOs
+namespace Sagat_To_Do_List.DTOs
 {
     public class UserDto
     {
